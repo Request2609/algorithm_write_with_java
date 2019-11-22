@@ -92,14 +92,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Grammers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="333">
-              <caret line="429" column="44" lean-forward="true" selection-start-line="429" selection-start-column="44" selection-end-line="429" selection-end-column="44" />
+            <state relative-caret-position="454">
+              <caret line="399" column="80" selection-start-line="399" selection-start-column="80" selection-end-line="399" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9380#9381#0" expanded="true" />
-                <element signature="e#9409#9410#0" expanded="true" />
-                <element signature="e#13771#13779#0" expanded="true" />
-                <element signature="e#16968#16969#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -148,9 +144,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1845" />
-    <option name="width" value="1389" />
-    <option name="height" value="789" />
+    <option name="x" value="67" />
+    <option name="y" value="108" />
+    <option name="width" value="1853" />
+    <option name="height" value="1053" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -180,7 +177,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1574348937771" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1574435795744" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Arquillian JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Arquillian JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -253,15 +250,16 @@
       <workItem from="1574145792702" duration="4730000" />
       <workItem from="1574164255699" duration="12497000" />
       <workItem from="1574241207317" duration="22852000" />
-      <workItem from="1574317548083" duration="23581000" />
+      <workItem from="1574317548083" duration="29510000" />
+      <workItem from="1574430711155" duration="5075000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73838000" />
+    <option name="totallyTimeSpent" value="84842000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1987" y="27" width="1853" height="1053" extended-state="6" />
+    <frame x="67" y="108" width="1853" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49887386" weight="0.21956769" />
@@ -274,8 +272,8 @@
       <window_info id="Web" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.11220044" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.03267974" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.12636165" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3093682" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -362,10 +360,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="jrt:///usr/lib/jvm/java-1.11.0-openjdk-amd64!/java.base/java/lang/String.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="192" column="9" lean-forward="true" selection-start-line="192" selection-start-column="9" selection-end-line="192" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jrt:///usr/lib/jvm/default-java!/java.base/java/io/FileInputStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="76" column="23" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jrt:///usr/lib/jvm/default-java!/java.base/java/lang/Class.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43133">
-          <caret line="1423" column="17" selection-start-line="1423" selection-start-column="17" selection-end-line="1423" selection-end-column="17" />
+        <state relative-caret-position="156">
+          <caret line="1306" selection-start-line="1306" selection-end-line="1306" />
         </state>
       </provider>
     </entry>
@@ -424,23 +436,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="jrt:///usr/lib/jvm/java-1.11.0-openjdk-amd64!/java.base/java/lang/String.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="192" column="9" lean-forward="true" selection-start-line="192" selection-start-column="9" selection-end-line="192" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Grammers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="429" column="44" lean-forward="true" selection-start-line="429" selection-start-column="44" selection-end-line="429" selection-end-column="44" />
+        <state relative-caret-position="454">
+          <caret line="399" column="80" selection-start-line="399" selection-start-column="80" selection-end-line="399" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9380#9381#0" expanded="true" />
-            <element signature="e#9409#9410#0" expanded="true" />
-            <element signature="e#13771#13779#0" expanded="true" />
-            <element signature="e#16968#16969#0" expanded="true" />
           </folding>
         </state>
       </provider>
