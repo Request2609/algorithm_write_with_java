@@ -17,7 +17,6 @@ public class Grammers {
             }
         }
     }
-
     public static void main(String[] args) {
         start = new String();
         ss = new HashSet<Character>();
@@ -32,23 +31,24 @@ public class Grammers {
             getSuanFu(tmp);
             ls.add(tmp);
         }
+        ls = Judge.removeDirectLeftRecur(ls) ;
         ArrayList<String> tmp = new ArrayList<>(ls);
         First fir = new First();
         fir.findVtFirst(ls);
-//        fir.getFirst(ls);
         ls = tmp;
-        start = ""+ls.get(0).charAt(0) ;
+        start = "" + ls.get(0).charAt(0);
         Follow foll = new Follow();
         foll.findFollow(ls, fir.getFirstMap());
 
-//        TipList tls = new TipList(fir.getFirstMap(), foll.getFollowMap(), ss, start, ls);
-//        System.out.println("follow集合:");
-//        print(foll.getFollowMap());
-//        System.out.println("first集合:");
-//        print(fir.getFirstMap());
-//        tls.process();
-//        String sss = input.next();
-//        tls.analy(sss);
+        TipList tls = new TipList(fir.getFirstMap(), foll.getFollowMap(), ss, start, ls);
+        System.out.println("follow集合:");
+        print(foll.getFollowMap());
+        System.out.println("first集合:");
+        print(fir.getFirstMap());
+        tls.process();
+        System.out.println("请输入测试表达式：");
+        String sss = input.next();
+        tls.analy(sss);
     }
 
     public static void print(Map<Character, Set<String>> setMap) {
@@ -208,10 +208,10 @@ class TipList {
             }
         }
         if (wenFa.size() == 0) {
-            System.out.println("文法分析成功!");
+            System.out.println("文法分析成功!合法语句");
             return;
         }
-        System.out.println("文法分析失败~~~");
+        System.out.println("文法分析失败~~~不合法语句");
     }
 
     public void printStack(Stack<String> s) {
@@ -232,19 +232,6 @@ class TipList {
         }
     }
 
-    public void printLst() {
-        for (Map.Entry<String, String> s : yuceList.entrySet()) {
-            System.out.println(s.getKey() + "      " + s.getValue());
-        }
-    }
-
-    public void getInfo(Stack<String> st, String aa) {
-        int index = aa.indexOf("e");
-        if (index != -1) return;
-        for (int i = 0; i < aa.length(); i++) {
-            st.push(aa.charAt(i) + "");
-        }
-    }
 
     public boolean isChar(char c) {
 
@@ -271,6 +258,66 @@ class TipList {
 }
 
 class Judge {
+    //检查是否为值接左递归
+    public static String getA(char c, String ss) {
+        int sindex = ss.indexOf("->") ;
+        String str = new String() ;
+        for(int i=sindex+3; i< ss.length(); i++) {
+            if(ss.charAt(i) == '|') break ;
+            str+=ss.charAt(i) ;
+        }
+        return str ;
+    }
+
+    public static ArrayList<String> removeDirectLeftRecur(ArrayList<String>ls) {
+        char x = 'X' ;
+        ArrayList<String>tmp = new ArrayList<>();
+        System.out.println("原来的文法产生式：");
+        for(String s : ls) {
+            char start = s.charAt(0) ;
+            System.out.println(start+"      " +s);
+            int index = s.indexOf("->") ;
+            if(index == -1) {
+                continue ;
+            }
+            String cur = s ;
+            s = s.substring(index) ;
+            index = s.indexOf(start) ;
+            if(index == -1) {
+                tmp.add(cur) ;
+                continue ;
+            }
+            //P->Pa|b    消除左递归的规则  P->bX, X->aX|e
+            String a = getA(start, s) ;
+            int index1 = s.indexOf('|') ;
+            if(index1 == -1)  {
+                tmp.add(s) ;
+                continue ;
+            }
+            String b = s.substring(index1+1) ;
+            tmp.add(start+"->"+b+x) ;
+            tmp.add(x+"->"+a+x+"|"+'e') ;
+            x+=1 ;
+        }
+        //消除左递归后
+        System.out.println("消除直接左递归后的结果：") ;
+        for(String s: tmp) {
+            System.out.println(s) ;
+        }
+        return tmp ;
+    }
+    public String getInfo(char start, String s, int index) {
+        String ss = new String() ;
+        for(int i=index; i>=0; i--) {
+            if(s.charAt(i) == start) {
+                break ;
+            }
+            if(Judge.isVn(s.charAt(i))) {
+                ss+=s.charAt(i) ;
+            }
+        }
+        return ss ;
+    }
     //是否为终结符号
     public static boolean isVn(char c) {
         //代表非终结符号
@@ -293,181 +340,98 @@ class Judge {
 class Follow {
     Map<Character, Set<String>> setMap;
     Map<Character, Set<String>> firstMap;
-    String start ;
-    int status ;
-    Map<String, String>list ;
+    String start;
+    int status;
+    ArrayList<String> list;
+
     public Map<Character, Set<String>> getFollowMap() {
         return setMap;
     }
-    public void findFollow(ArrayList<String>ls, Set<String>set, char start, int status, int index) {
-        int len = ls.size() ;
-        if(index >= len) {
-            return  ;
+
+    public void findFollow(ArrayList<String> ls, Set<String> set, char start, int index) {
+        int len = ls.size();
+        if (index >= len) {
+            return;
         }
-        System.out.println(ls.get(index));
-        String tmp = ls.get(index) ;
-        int tmpLen = tmp.length() ;
-        char cur = tmp.charAt(0) ;
+        String tmp = ls.get(index);
+        int tmpLen = tmp.length();
+        char cur = tmp.charAt(0);
         //在集合中找start
-        int tipIndex = tmp.indexOf(start) ;
-        if(tipIndex == -1 || tipIndex == 0) {
-            findFollow(ls, set, start, status, index+1) ;
+        int tipIndex = tmp.indexOf(start);
+        if (tipIndex == -1 || tipIndex == 0) {
+            findFollow(ls, set, start, index + 1);
         }
         //在文法中找到了相应的非终结符号
         else {
             int i = tipIndex + 1;
-            System.out.println(len+"|||||||||||||>"+i);
             //A->aB这种情况
-            if(i >= tmpLen) {
-                status = 1 ;
+            if (i >= tmpLen) {
                 //将当前这个文法开始符号加到list中，退出递归后将
-                System.out.println(ls.get(index)+"========>"+cur+"+"+start+"--------------------_>"+start+"");
-                list.put(cur+"+"+start, start+"") ;
-                return ;
+                list.add(cur + "+" + start);
+                return;
             }
-            for(i=tipIndex+1; i<tmpLen; i++) {
-                char next = tmp.charAt(i) ;
+            for (i = tipIndex + 1; i < tmpLen; i++) {
+                char next = tmp.charAt(i);
                 //是非终结符号,考虑第二种情况
-                if(next == '|') break ;
+                if (next == '|') break;
                 //是终结符号直接加到follow表中
-                if(!Judge.isVn(next)) {
-                    set.add(next+"") ;
+                if (!Judge.isVn(next)) {
+                    set.add(next + "");
                 }
-                if(Judge.isVn(next)) {
+                if (Judge.isVn(next)) {
                     //获取当前非终结符号的first集合
-                    Set<String> t = firstMap.get(next) ;
-                    if(!t.isEmpty()) {
-                        addFirToFollow(t, set) ;
+                    Set<String> t = firstMap.get(next);
+                    if (!t.isEmpty()) {
+                        addFirToFollow(t, set);
                         //第三种情况第二种A->aBc
-                        if(firHasEmpty(t)) {
-                            list.put(cur+"+"+start,start+"") ;
+                        if (firHasEmpty(t)) {
+                            list.add(next + "+" + start);
                         }
                     }
                 }
             }
-         }
-     }
-     public void addFirToFollow(Set<String>setSrc, Set<String>setDst) {
-        for(String s : setSrc) {
-            if(!s.equals("e"))
-                setDst.add(s) ;
         }
-     }
-    public boolean firHasEmpty(Set<String>ls) {
-        for(String s : ls) {
-            if(s.equals("e")) {
-                return true ;
+    }
+
+    public void addFirToFollow(Set<String> setSrc, Set<String> setDst) {
+        for (String s : setSrc) {
+            if (!s.equals("e"))
+                setDst.add(s);
+        }
+    }
+
+    public boolean firHasEmpty(Set<String> ls) {
+        for (String s : ls) {
+            if (s.equals("e")) {
+                return true;
             }
         }
-        return false ;
+        return false;
     }
 
     public void findFollow(ArrayList<String> ls, Map<Character, Set<String>> firstMap) {
-        list = new HashMap<>() ;
+        list = new ArrayList<>();
         setMap = new HashMap<>();
         Set<String> set = null;
         this.firstMap = firstMap;
         //先确定开始符号
         for (int i = 0; i < ls.size(); i++) {
-            status = 0 ;
+            status = 0;
             set = new HashSet<String>();
             String ss = ls.get(i);
-            System.out.println("==========================>"+ss+"<==========================");
             //获取非终结符号
             char tmp = ss.charAt(0);
             if (i == 0) {
-                /////////////////////////////
-                start = tmp+"" ;
-                /////////////////////////
+                start = tmp + "";
                 set.add("#");
-                //将当前字符串集合传进getOther
-                //getOther(tmp, set, ls);
             }
-            findFollow(ls, set, tmp, status, 0) ;
-            System.out.println("--------------------->"+set.size()+"<---------------------------");
+            findFollow(ls, set, tmp, 0);
             setMap.put(tmp, set);
-        }
-        //遍历map将follow集合加到相应的follow文法集合中
-        for(Map.Entry<String, String> s : list.entrySet()) {
-            char src = s.getKey().charAt(0) ;
-            char dst = s.getValue().charAt(0) ;
-            if(setMap.get(src+"") != null || setMap.get(dst) != null) {
-                continue ;
-            }
-            setMap.get(dst+"").addAll(setMap.get(src+"")) ;
-        }
-        for(Map.Entry<Character, Set<String>> s : setMap.entrySet()) {
-            System.out.println("*******************************************>    "+s.getKey());
-            Set<String> ssss = s.getValue() ;
-            for(String j:ssss) {
-                System.out.println(j);
-            }
-            System.out.println("***********************************************");
-        }
-//        searchOther(setMap, ls, 0);
-//        for (String s : ls) {
-//            char a = s.charAt(0);
-//            setMap.get(a).addAll(set1);
-//        }
-//        setMap.get('F').add("+");
-    }
-
-    //找递归包含自身的表达式
-    void searchOther(Map<Character, Set<String>> setmap, ArrayList<String> ls, int i) {
-        //获取当前字符串
-        if (i >= ls.size()) return;
-        String ss = ls.get(i);
-        //判断当前字符串最后是否为A->xA形式
-        char a = ss.charAt(0);
-        char end = ss.charAt(ss.length() - 1);
-        //判断最后一个字符是非终结符号
-        boolean res = Judge.isVn(end);
-        //先将所有
-        //X->aY形式的X的follow集合加入到Y中
-        if (res) {
-            if (end != a) {
-                setmap.get(end).addAll(setmap.get(a));
-                searchOther(setmap, ls, i + 1);
-            }
-        }
-        if (end == 'e') {
-            //是个消除做递归文法在产生式中找自己
-            ss = ss.substring(1);
-            int index = ss.indexOf(a);
-            if (index == -1) {
-                return;
-            }
-            char cc = ss.charAt(index - 1);
-            if (Judge.isVn(cc)) {
-                Set<String> set = firstMap.get(ss.charAt(index));
-                for (String s : set) {
-                    if (!s.equals("e"))
-                        setmap.get(cc).add(s);
-                }
-            }
-        }
-        searchOther(setmap, ls, i + 1);
-    }
-
-    public void getOther(char a, Set<String> set, ArrayList<String> ls) {
-        int flag = 0;
-        for (int i = 1; i < ls.size(); i++) {
-            String s = ls.get(i);
-            int index = s.indexOf(a);
-            if (index == -1) {
-                continue;
-            } else {
-                //把后面的元素也加入到集合中
-                char c = s.charAt(index + 1);
-                if (c == '|') {
-                    break;
-                }
-                if (!Judge.isVn(c)) {
-                    flag = 1;
-                    set.add(c + "");
-                    continue;
-                } else if (Judge.isVn(c) && flag == 1) {
-                    break;
+            if (!list.isEmpty()) {
+                for (String s : list) {
+                    char src = s.charAt(0);
+                    char dst = s.charAt(s.length() - 1);
+                    setMap.get(dst).addAll(setMap.get(src));
                 }
             }
         }
@@ -485,7 +449,6 @@ class First {
                 int index = tmp.indexOf("->");
                 String tt = new String();
                 tt = tmp.substring(index + 2);
-//                System.out.println("=========>"+tt);
                 return tt;
             }
         }
@@ -513,7 +476,6 @@ class First {
         //是个非终结符号
         if (tmp != '|' && Judge.isVn(tmp)) {
             info = getInfo(ls, tmp);
-//            System.out.println("------------>" + info);
             //判断是否含有空串
             findFirst(set, ls, start, index, info);
             if (index < info.length()) {
@@ -532,7 +494,6 @@ class First {
             for (i = index; i < info.length(); i++) {
                 char cc = info.charAt(i);
                 if (!Judge.isVn(cc) && cc != '|') {
-                    System.out.println(cc);
                     set.add(cc + "");
                 } else {
                     break;
@@ -540,7 +501,6 @@ class First {
             }
             int j = info.indexOf("|");
             if (j != -1) {
-                System.out.println(info.charAt(j + 1));
                 set.add(info.charAt(j + 1) + "");
             }
             if (i >= info.length() || info.charAt(i) == start) {
@@ -569,81 +529,12 @@ class First {
             String str = ls.get(i);
             Set<String> set = new HashSet<String>();
             char aa = str.charAt(0);
-            System.out.println("--------->" + aa + "<---------");
             int index = str.indexOf("->");
             str = str.substring(index + 2);
             findFirst(set, ls, aa, 0, str);
             setMap.put(aa, set);
-//            System.out.println(set.size());
-            System.out.println();
         }
-        /////////////////////////////////////////////
-//        tmp = new ArrayList<String>();
-//        for (int i = 0; i < ls.size(); i++) {
-//            String s = ls.get(i);
-//            if (!Judge.isVn(s.charAt(s.indexOf("->") + 2))) {
-//                tmp.add(s);
-//                ls.remove(s);
-//                i--;
-//            }
-//        }
         return tmp;
-    }
-
-    //获取部分费终结符号的first集和
-    public void getFirst(ArrayList<String> ls) {
-        ArrayList<String> tmp = findVtFirst(ls);
-        if (tmp == null) {
-            return;
-        }
-        setMap = new HashMap<Character, Set<String>>();
-        //先找第一个是终结符号的first集合
-        for (int i = 0; i < ls.size(); i++) {
-            Set<String> ss = new HashSet<String>();
-            //初始化非终结符号的键值
-            setMap.put(ls.get(i).charAt(0), ss);
-        }
-        getFirstEasy(tmp, setMap);
-        getFirstHard(0, ls, setMap);
-    }
-
-    public void getFirstHard(int i, ArrayList<String> ls, HashMap<Character, Set<String>> setMap) {
-        String ss = ls.get(i);
-        int index = ss.indexOf("->");
-        char model = ss.charAt(index + 2);
-        Set<String> set = setMap.get(model);
-        if (set.isEmpty()) {
-            getFirstHard(i + 1, ls, setMap);
-        }
-        set = setMap.get(model);
-        setMap.get(ss.charAt(0)).addAll(set);
-    }
-
-    public void getFirstEasy(ArrayList<String> ls, HashMap<Character, Set<String>> setMap) {
-        String ss = null;
-        int index = 0;
-
-        for (int i = 0; i < ls.size(); i++) {
-            Set<String> set = new HashSet<String>();
-            ss = ls.get(i);
-            char key = ss.charAt(0);
-            index = ss.indexOf("->") + 2;
-            ss = ss.substring(index);
-            for (int j = 0; j < ss.length(); j++) {
-                char aa = ss.charAt(j);
-                if (aa != '|' && !Judge.isVn(aa)) {
-                    set.add(aa + "");
-                } else {
-                    aa = ss.charAt(ss.length() - 1);
-                    if (!Judge.isVn(aa)) {
-                        set.add(aa + "");
-                    }
-                    break;
-                }
-            }
-            setMap.put(key, set);
-        }
-        //遍历结果
     }
 
     public HashMap<Character, Set<String>> getFirstMap() {
