@@ -31,6 +31,7 @@ public class Grammers {
             getSuanFu(tmp);
             ls.add(tmp);
         }
+        //消除间接左递归
         ls = Judge.removeDirectLeftRecur(ls) ;
         ArrayList<String> tmp = new ArrayList<>(ls);
         First fir = new First();
@@ -66,7 +67,8 @@ public class Grammers {
 
 class TipList {
     Map<String, String> yuceList;
-    Map<Character, Set<String>> follMap;
+    Map<Character, Set<String>>
+            follMap;
     Map<Character, Set<String>> firstMap;
     Set<Character> ss;
     String start;
